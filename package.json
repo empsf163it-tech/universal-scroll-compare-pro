@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Responsive Compare Workspace Desktop Application",
   "main": "main.js",
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "scripts": {
     "start": "electron .",
     "server": "node server.js",

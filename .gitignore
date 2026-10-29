@@ -7,3 +7,4 @@ unwanted/
 .public-url.txt
 data/*.db-shm
 data/*.db-wal
+
