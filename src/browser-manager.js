@@ -7,7 +7,12 @@
  * 3. "local"  -> Local Chrome / Edge execution via Puppeteer Core
  */
 
-const puppeteer = require("puppeteer-core");
+let puppeteer = null;
+try {
+  puppeteer = require("puppeteer-core");
+} catch (e) {
+  console.warn("[BrowserManager] puppeteer-core not installed; using built-in /api/proxy engine.");
+}
 const fs = require("fs");
 const path = require("path");
 
