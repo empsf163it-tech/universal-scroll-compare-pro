@@ -1,0 +1,78 @@
+{
+  "name": "responsive-compare-workspace",
+  "version": "1.0.0",
+  "description": "Responsive Compare Workspace Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "server": "node server.js",
+    "test:saas": "node tests/test-saas-workflow.js",
+    "test:backend": "node unwanted/test-backend.js",
+    "test:comparison": "node unwanted/test-complete-device-comparison.js",
+    "test:auth": "node unwanted/test-auth-isolation.js",
+    "pack": "electron-packager . ResponsiveCompare --platform=win32 --arch=x64 --out=dist --overwrite",
+    "portable": "electron-builder --win portable",
+    "build:mac": "electron-builder --mac dmg zip",
+    "build:linux": "electron-builder --linux AppImage",
+    "build:all": "electron-builder -wml"
+  },
+  "build": {
+    "appId": "com.responsivecompare.app",
+    "productName": "ResponsiveCompare",
+    "files": [
+      "main.js",
+      "server.js",
+      "index.html",
+      "style.css",
+      "script.js",
+      "manifest.json",
+      "sw.js",
+      "icon.svg",
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist-portable-exe"
+    },
+    "win": {
+      "target": "portable"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    },
+    "portable": {
+      "artifactName": "ResponsiveCompare-Portable.exe"
+    }
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^5.1.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^26.15.3",
+    "electron-packager": "^17.1.2"
+  },
+  "keywords": [
+    "responsive",
+    "compare",
+    "desktop",
+    "smart-fusion"
+  ],
+  "author": {
+    "name": "Smart Fusion QA Architecture Team",
+    "organization": "Smart Fusion Corporate Solutions Private Limited"
+  },
+  "copyright": "Copyright (c) 2026 Smart Fusion Corporate Solutions Private Limited. All Rights Reserved.",
+  "license": "Proprietary - Smart Fusion Corporate Solutions Private Limited"
+}

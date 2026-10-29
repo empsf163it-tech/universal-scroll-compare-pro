@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist-portable-exe/
+unwanted/
+.env
+*.log
+.public-url.txt
+data/*.db-shm
+data/*.db-wal

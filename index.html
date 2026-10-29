@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Scroll Compare Pro - Multi-Device Viewport Sync & Remote Rendering</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <meta name="theme-color" content="#0284c7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+</head>
+
+<body class="dark-saas">
+
+  <!-- =====================================================================
+       1. PUBLIC MARKETING & PRODUCT LANDING PAGE (DEFAULT PUBLIC ENTRY)
+       ===================================================================== -->
+  <div id="publicLandingView" class="public-landing-view">
+
+    <!-- Public Header / Navbar -->
+    <header class="public-navbar">
+      <div class="nav-container">
+        <a href="#hero" class="brand-logo">
+          <span class="brand-sq">▣</span>
+          <span class="brand-name">Universal Scroll Compare <mark class="pro-tag">PRO</mark></span>
+        </a>
+
+        <nav class="nav-menu">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#howItWorks" class="nav-link">How It Works</a>
+          <a href="#pricing" class="nav-link">Pricing (₹399)</a>
+          <a href="#faq" class="nav-link">FAQ</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+
+        <div class="nav-auth-actions">
+          <button id="navSignInBtn" class="secondary-btn-sm" type="button">Sign In</button>
+          <button id="navStartTrialBtn" class="primary-btn-sm" type="button">Start 3-Day Free Trial</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <div class="hero-container">
+        <div class="hero-badge">
+          <span>⚡ Works Online & Installs as a Standalone App on Windows, macOS, Linux, Android & iOS</span>
+        </div>
+        <h1 class="hero-headline">
+          Simulate, Reflow & Synchronize Responsive Websites in Real Time.
+        </h1>
+        <p class="hero-subline">
+          Compare your websites across Mobile, Tablet, and Desktop side-by-side with sub-millisecond scroll
+          synchronization.
+          Powered by server-side headless browser rendering that completely eliminates <code>CORS</code> and
+          <code>X-Frame-Options</code> restrictions.
+        </p>
+
+        <div class="hero-cta-group">
+          <button id="heroStartTrialBtn" class="hero-primary-btn" type="button">
+            <span>🚀 Start 3-Day Free Trial (Web App)</span>
+          </button>
+          <button id="heroDownloadExeBtn" class="hero-secondary-btn" type="button">
+            <span>📲 Install App (All Devices) & Share URL</span>
+          </button>
+        </div>
+        <p class="hero-microcopy">✓ Exactly 72 hours free access • No payment required upfront • Mandatory signup for
+          private data isolation</p>
+
+        <!-- Interactive Device Preview Showcase Mockup -->
+        <div class="hero-showcase-box">
+          <div class="showcase-header">
+            <span class="mock-dot red"></span>
+            <span class="mock-dot yellow"></span>
+            <span class="mock-dot green"></span>
+            <span class="mock-address-bar">https://your-website.com — [Synchronized Remote Viewports: Active]</span>
+          </div>
+          <div class="mock-viewport-row">
+            <div class="mock-card mock-mobile">
+              <div class="mock-card-head"><span>iPhone 15 Pro (393px)</span><small class="tag-sync">Sync: 100%</small>
+              </div>
+              <div class="mock-screen-content">
+                <div class="mock-hero-bar"></div>
+                <div class="mock-text-line w80"></div>
+                <div class="mock-text-line w60"></div>
+                <div class="mock-card-item"></div>
+                <div class="mock-card-item"></div>
+              </div>
+            </div>
+
+            <div class="mock-card mock-tablet">
+              <div class="mock-card-head"><span>iPad Air 10.9" (820px)</span><small class="tag-sync">Sync: 100%</small>
+              </div>
+              <div class="mock-screen-content">
+                <div class="mock-hero-bar"></div>
+                <div class="mock-grid-row">
+                  <div class="mock-card-item"></div>
+                  <div class="mock-card-item"></div>
+                </div>
+                <div class="mock-text-line w90"></div>
+              </div>
+            </div>
+
+            <div class="mock-card mock-desktop">
+              <div class="mock-card-head"><span>Desktop FHD (1920px)</span><small class="tag-sync">Sync: 100%</small>
+              </div>
+              <div class="mock-screen-content">
+                <div class="mock-hero-bar"></div>
+                <div class="mock-grid-row three-col">
+                  <div class="mock-card-item"></div>
+                  <div class="mock-card-item"></div>
+                  <div class="mock-card-item"></div>
+                </div>
+                <div class="mock-text-line w70"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+      <div class="section-container">
+        <div class="section-tag">ENGINEERING HIGHLIGHTS</div>
+        <h2 class="section-title">Built for High-Precision Responsive QA</h2>
+        <p class="section-desc">Traditional client-side iframes fail because modern websites send security headers. Our
+          remote rendering architecture solves this permanently.</p>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feat-icon">🌐</div>
+            <h3>Remote Chromium Rendering</h3>
+            <p>Runs on server-side headless browsers to render any target domain, completely bypassing
+              <code>X-Frame-Options: SAMEORIGIN</code> and <code>CORS</code> blocks.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feat-icon">🔄</div>
+            <h3>Relative % Mathematical Scroll Sync</h3>
+            <p>Computes viewport height variations and reflow offsets. Scrolling any device frame synchronously
+              positions all other viewports to identical content depth.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feat-icon">🤖</div>
+            <h3>Anti-Bot & Automation Evasion</h3>
+            <p>Spoofs headers, masks <code>navigator.webdriver</code>, and emulates realistic device DPRs to bypass
+              Cloudflare challenges and automated bot screens.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feat-icon">🛡️</div>
+            <h3>Strict User Data Isolation</h3>
+            <p>Private SQLite database storage: your tested URLs, custom device configurations, and verification audit
+              history are encrypted and isolated per user account.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feat-icon">📐</div>
+            <h3>20+ Certified Device Profiles</h3>
+            <p>Instant presets for iPhone 15 Pro, Pixel 8, iPad Air, Surface Pro, and 1080p Desktop displays with
+              drag-to-resize and rotation support.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feat-icon">📸</div>
+            <h3>Full Viewport PNG Capture</h3>
+            <p>One-click capture for single device frames or entire synchronized multi-screen arrays with clipboard copy
+              and PNG export.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="howItWorks" class="how-section">
+      <div class="section-container">
+        <div class="section-tag">SIMPLE 3-STEP WORKFLOW</div>
+        <h2 class="section-title">How Universal Scroll Compare Works</h2>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h3>Create Your Free Account</h3>
+            <p>Sign up in seconds to start your 3-day (72-hour) free trial. No credit card or upfront payment required.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h3>Enter Target Website URL</h3>
+            <p>Input any website or internal staging URL. The remote browser engine spins up isolated mobile, tablet,
+              and desktop viewports.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h3>Scroll & Compare In Real Time</h3>
+            <p>Scroll any screen with your mouse wheel or trackpad. Watch all viewports reflow and scroll together in
+              real time.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section">
+      <div class="section-container">
+        <div class="section-tag">TRANSPARENT PRICING</div>
+        <h2 class="section-title">Simple, Predictable Plans</h2>
+        <p class="section-desc">Try full features for 3 days free. Upgrade anytime for ₹399 per month.</p>
+
+        <div class="pricing-cards-wrapper">
+          <!-- 3-Day Free Trial Card -->
+          <div class="pricing-card free-trial-card">
+            <div class="plan-header">
+              <span class="plan-badge">No Payment Upfront</span>
+              <h3>3-Day Free Trial</h3>
+              <p>Full-feature access for evaluation</p>
+            </div>
+            <div class="plan-price">
+              <span class="currency">₹</span>
+              <span class="amount">0</span>
+              <span class="period">/ 72 hours</span>
+            </div>
+            <ul class="plan-perks">
+              <li>✓ Exactly 72 hours full access</li>
+              <li>✓ Up to 3 simultaneous synchronized viewports</li>
+              <li>✓ Remote Headless Chromium engine</li>
+              <li>✓ Bypasses CORS & X-Frame-Options</li>
+              <li>✓ Private user account & history</li>
+            </ul>
+            <button id="pricingStartTrialBtn" class="plan-btn secondary" type="button">Start Free Trial Now</button>
+            <small class="plan-note">Automatically locks after 72 hours unless upgraded.</small>
+          </div>
+
+          <!-- Professional Subscription Card -->
+          <div class="pricing-card pro-card highlight-card">
+            <div class="popular-ribbon">MOST POPULAR</div>
+            <div class="plan-header">
+              <span class="plan-badge accent">Full Commercial License</span>
+              <h3>Professional Plan</h3>
+              <p>For web agencies, QA engineers & developers</p>
+            </div>
+            <div class="plan-price">
+              <span class="currency">₹</span>
+              <span class="amount">399</span>
+              <span class="period">/ month</span>
+            </div>
+            <ul class="plan-perks">
+              <li>✓ Unlimited responsive website testing</li>
+              <li>✓ Up to 10 simultaneous device viewports</li>
+              <li>✓ Ultra-low latency remote browser streaming</li>
+              <li>✓ Drag-to-resize & custom screen resolutions</li>
+              <li>✓ Anti-bot & Cloudflare stealth evasion</li>
+              <li>✓ Private encrypted SQLite audit records</li>
+              <li>✓ 7-Day Money-Back Guarantee</li>
+            </ul>
+            <button id="pricingSubscribeBtn" class="plan-btn primary" type="button">Subscribe for ₹399/mo</button>
+            <small class="plan-note">Backend-enforced access • Automatic payment verification</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq-section">
+      <div class="section-container">
+        <div class="section-tag">FREQUENTLY ASKED QUESTIONS</div>
+        <h2 class="section-title">Got Questions? We Have Answers.</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <h4>How does the 3-day free trial work?</h4>
+            <p>When you register and log in for the first time, an exact 72-hour timer begins. You have unrestricted
+              access to all testing features without entering any payment information.</p>
+          </div>
+          <div class="faq-item">
+            <h4>What happens when the 72-hour trial expires?</h4>
+            <p>Testing features are automatically locked by the server. You can still log in to view your account,
+              export your test logs, and subscribe for ₹399/month to instantly restore full access.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Why can't I just keep a browser tab open to bypass the trial?</h4>
+            <p>Every remote render request, frame capture, and scroll synchronization command is verified on the backend
+              server. Keeping a browser tab open past 72 hours will immediately block further testing.</p>
+          </div>
+          <div class="faq-item">
+            <h4>What payment methods are supported?</h4>
+            <p>We support UPI (Google Pay, PhonePe, Paytm), Credit/Debit Cards (Visa, MasterCard, RuPay), and
+              NetBanking.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & Ownership Section -->
+    <section id="contact" class="contact-section">
+      <div class="section-container">
+        <div class="contact-card">
+          <div class="contact-info">
+            <span class="shield-tag">🛡️ CERTIFIED ORIGINAL ENTERPRISE SOFTWARE</span>
+            <h3>Smart Fusion Corporate Solutions Private Limited</h3>
+            <p>Quality Assurance & Software Engineering Division</p>
+            <div class="author-credits">
+              <span><strong>Engineering Division:</strong> Core Systems & QA Architecture Team</span>
+              <span><strong>Email Support:</strong> support@smartfusion.com</span>
+              <span><strong>Corporate License:</strong> Proprietary Commercial Enterprise License</span>
+            </div>
+          </div>
+          <div class="contact-action">
+            <h4>Ready to test your websites?</h4>
+            <button id="footerStartTrialBtn" class="hero-primary-btn" type="button">Start Your 3-Day Free Trial
+              →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Public Footer -->
+    <footer class="public-footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <span>© 2026 Smart Fusion Corporate Solutions Private Limited. All Rights Reserved.</span>
+        </div>
+        <div class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- =====================================================================
+       2. RESPONSIVE VERIFYING WORKSPACE (ONLY ACCESSIBLE AFTER MANDATORY LOGIN)
+       ===================================================================== -->
+  <div id="appWorkspaceView" class="app-workspace-view hidden">
+    <!-- Desktop Application Top Menu Bar -->
+    <header class="app-menubar">
+      <div class="menubar-left">
+        <div class="app-logo" id="appLogoBtn" title="Back to Public Landing Screen">
+          <div class="logo-sq">▣</div>
+          <span>Universal Scroll Compare Pro</span>
+        </div>
+
+        <nav class="menu-items">
+          <div class="menu-dropdown">
+            <button class="menu-btn">View <small>▾</small></button>
+            <div class="dropdown-content">
+              <a href="#" id="viewLayoutRow">Horizontal Scroll Row (Default)</a>
+              <a href="#" id="viewLayoutGrid">Grid Wrap View</a>
+              <a href="#" id="viewLayoutStack">Vertical Stack View</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" id="menuSortWidthAsc">⇄ Align Positions: Small to Large Width</a>
+              <a href="#" id="menuSortReverse">🔄 Align Positions: Reverse Sequence</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" id="toggleCheckerboard">Toggle Background Grid</a>
+            </div>
+          </div>
+
+          <div class="menu-dropdown">
+            <button class="menu-btn">Capture <small>▾</small></button>
+            <div class="dropdown-content">
+              <a href="#" id="menuCopyScreenshot">📋 Copy Screenshot to Clipboard</a>
+              <a href="#" id="menuDownloadScreenshot">⬇️ Download PNG Screenshot</a>
+            </div>
+          </div>
+
+          <div class="menu-dropdown">
+            <button class="menu-btn">Tools <small>▾</small></button>
+            <div class="dropdown-content">
+              <a href="#" id="menuOpenHistory">📜 URL Verification History</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" id="toggleDevTools">Toggle DevTools Drawer</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" id="menuOpenAbout">🛡️ Ownership & Legal License</a>
+            </div>
+          </div>
+
+          <button class="menu-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">◐ Theme</button>
+          <button class="menu-btn" id="workspaceShareAppBtn"
+            title="Share Online URL or Install Standalone App on Any Device">📲 Share / Install App</button>
+        </nav>
+      </div>
+
+      <div class="menubar-right">
+        <!-- Live Trial & Subscription Status Pill -->
+        <div id="subStatusPill" class="sub-status-pill trial">
+          <span class="sub-dot"></span>
+          <span id="subRemainingText">⏳ Free Trial: 72h left</span>
+          <button id="subUpgradeBtn" class="upgrade-btn-sm" type="button">Upgrade (₹399/mo)</button>
+        </div>
+
+        <!-- User Profile Pill -->
+        <div id="userProfileBadge" class="user-profile-badge">
+          <span class="user-avatar-icon">👤</span>
+          <span id="userDisplayName">Account</span>
+          <button id="logoutBtn" class="logout-btn" title="Sign out of account">Sign Out</button>
+        </div>
+
+        <button class="license-badge-btn" id="headerLicenseBtn" title="View Ownership Certificate & Authorship Proof">
+          <span class="shield-icon">🛡️</span>
+          <span class="corp-name">Smart Fusion</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Browser Multi-Tab Navigation Bar -->
+    <div class="browser-tabs-bar">
+      <div id="tabsContainer" class="tabs-list"></div>
+      <button id="addTabBtn" type="button" class="add-tab-btn" title="Open New Browser Comparison Tab">＋ New
+        Tab</button>
+    </div>
+
+    <!-- Main Browser Navigation & Control Toolbar -->
+    <section class="toolbar">
+      <div class="nav-controls">
+        <button id="homeBackBtn" class="tool-btn highlight-btn" title="← Exit to Public Portal">← Portal</button>
+        <button id="gridToggleBtn" class="tool-btn" title="Toggle Grid Pattern">▦</button>
+        <button id="reloadAll" class="tool-btn" title="Reload All Screens">↻</button>
+      </div>
+
+      <div class="url-address-bar">
+        <input id="urlInput" placeholder="Paste or enter website URL manually (e.g. https://...)" autocomplete="off">
+        <button id="compareBtn" type="button" class="primary-btn url-load-btn">Load URL →</button>
+      </div>
+
+      <div class="toolbar-actions">
+        <button id="historyBtn" class="tool-btn" title="View & Verify Tested URL History">
+          <span>📜 History</span>
+        </button>
+
+        <button id="layoutToggleBtn" class="tool-btn active-state" title="Toggle Layout Mode">
+          <span id="viewLayoutModeBtn">▤ Row Scroll</span>
+        </button>
+
+        <button id="addScreenBtn" class="tool-btn highlight" title="Add another device screen">
+          <span>＋ Add Device</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Main Workspace Canvas -->
+    <main id="workspace" class="workspace layout-row">
+      <!-- Initial Welcome / Empty Screen -->
+      <div id="empty" class="empty">
+        <div class="empty-icon">▣</div>
+        <h1>Compare Responsive Layouts</h1>
+        <p>Paste your website URL manually below and choose your devices to compare side-by-side with live interactive
+          viewports and synchronized scrolling.</p>
+        <div class="empty-url-entry">
+          <input id="emptyUrlInput" type="url" placeholder="Paste website URL manually here (e.g. https://...)"
+            autocomplete="off">
+        </div>
+        <div class="empty-actions">
+          <button id="customCompareBtn" class="primary-btn">Select Devices & Compare →</button>
+          <button id="quick3DeviceBtn" class="primary-btn highlight-btn">⚡ 3-Device Sync (Mobile, Tablet,
+            Desktop)</button>
+        </div>
+      </div>
+
+      <!-- Comparison View -->
+      <section id="comparison" class="comparison hidden">
+        <div id="screenGrid" class="screen-grid"></div>
+      </section>
+    </main>
+
+    <!-- Bottom DevTools Inspector Drawer -->
+    <footer id="devtoolsDrawer" class="devtools-drawer collapsed">
+      <div class="devtools-header">
+        <div class="devtools-tabs">
+          <button class="tab-btn active" data-tab="console">Console Log</button>
+          <button class="tab-btn" data-tab="elements">Elements Inspection</button>
+          <button class="tab-btn" data-tab="network">Network (200 OK)</button>
+          <button class="tab-btn" data-tab="responsively">Responsively Metrics</button>
+        </div>
+        <div class="devtools-actions">
+          <button id="clearConsoleBtn" class="icon-text-btn">Clear</button>
+          <button id="closeDevTools" class="close-drawer-btn">✕</button>
+        </div>
+      </div>
+
+      <div class="devtools-body">
+        <div id="tabConsole" class="tab-content active">
+          <div class="console-line info">[System] Workspace ready. Enter target URL to begin responsive comparison.
+          </div>
+        </div>
+
+        <div id="tabElements" class="tab-content">
+          <pre class="code-preview"><code>&lt;!-- Remote Rendered DOM Tree --&gt;</code></pre>
+        </div>
+
+        <div id="tabNetwork" class="tab-content">
+          <table class="network-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>remote-stream</td>
+                <td>200 OK</td>
+                <td>image/jpeg</td>
+                <td>65 KB</td>
+                <td>14ms</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="tabResponsively" class="tab-content">
+          <div class="metrics-grid">
+            <div class="metric-card"><strong>Active Viewports</strong><span id="activeDeviceCountText">0 Devices</span>
+            </div>
+            <div class="metric-card"><strong>Drag Resize</strong><span class="text-green">Mouse Drag Active</span></div>
+          </div>
+        </div>
+
+        <div id="tabRemote" class="tab-content">
+          <div class="metrics-grid">
+            <div class="metric-card"><strong>Remote Engine</strong><span id="remoteEngineStatusText"
+                class="text-green">Connected (Node/Express Backend)</span></div>
+            <div class="metric-card"><strong>Engine Provider</strong><span id="remoteEngineModeText">Hybrid (Browserless
+                + Local Chromium)</span></div>
+            <div class="metric-card"><strong>CORS / X-Frame-Options</strong><span class="text-green">Bypassed (Headless
+                Render)</span></div>
+            <div class="metric-card"><strong>Active Remote Session</strong><span id="remoteSessionIdText">Ready</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- =====================================================================
+       3. MANDATORY AUTHENTICATION MODAL (SIGN IN / REGISTER FOR 3-DAY TRIAL)
+       ===================================================================== -->
+  <div id="authModal" class="modal hidden">
+    <div class="modal-card auth-modal-card">
+      <div class="auth-box-header">
+        <div class="auth-nav-tabs">
+          <button id="tabBtnSignIn" class="auth-tab-btn" type="button">Sign In</button>
+          <button id="tabBtnRegister" class="auth-tab-btn active" type="button">Create Account (3-Day Free
+            Trial)</button>
+        </div>
+        <button id="closeAuthModalBtn" class="close-btn" title="Close" type="button">×</button>
+      </div>
+
+      <div class="auth-header-copy">
+        <h3 id="authHeaderTitle">Start 3-Day Free Trial (₹0)</h3>
+        <p id="authHeaderSub">Exact 72 hours full access • Mandatory signup for private data isolation</p>
+      </div>
+
+      <div id="authAlertBox" class="auth-alert hidden"></div>
+
+      <!-- Sign In Form -->
+      <form id="signInForm" class="auth-form-body hidden">
+        <div class="form-group">
+          <label for="loginIdentifier">Username or Email Address</label>
+          <input type="text" id="loginIdentifier" placeholder="Username or email address" required
+            autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="loginPassword" placeholder="••••••••••••" required
+              autocomplete="current-password">
+            <button type="button" class="pwd-toggle-btn" id="toggleLoginPasswordBtn" title="Show password"
+              aria-label="Toggle password visibility">
+              <svg class="eye-icon eye-show" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg class="eye-icon eye-hide hidden" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                </path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="signInSubmitBtn" class="primary-btn auth-submit-btn">
+          <span>Sign In & Open Workspace →</span>
+        </button>
+      </form>
+
+      <!-- Registration Form -->
+      <form id="registerForm" class="auth-form-body">
+        <div class="form-group">
+          <label for="regFullName">Full Name</label>
+          <input type="text" id="regFullName" placeholder="Enter your full name" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label for="regUsername">Username</label>
+          <input type="text" id="regUsername" placeholder="Choose a username" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="regEmail">Work Email Address</label>
+          <input type="email" id="regEmail" placeholder="name@company.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="regPassword">Password (Min 6 Characters)</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="regPassword" placeholder="Create a secure password" minlength="6" required
+              autocomplete="new-password">
+            <button type="button" class="pwd-toggle-btn" id="toggleRegPasswordBtn" title="Show password"
+              aria-label="Toggle password visibility">
+              <svg class="eye-icon eye-show" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg class="eye-icon eye-hide hidden" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                </path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regConfirmPassword">Confirm Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="regConfirmPassword" placeholder="Re-enter your password to confirm" minlength="6"
+              required autocomplete="new-password">
+            <button type="button" class="pwd-toggle-btn" id="toggleRegConfirmPasswordBtn" title="Show password"
+              aria-label="Toggle password visibility">
+              <svg class="eye-icon eye-show" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg class="eye-icon eye-hide hidden" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                </path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+          <small id="regPasswordMatchHint" class="pwd-match-hint hidden"></small>
+        </div>
+
+        <button type="submit" id="registerSubmitBtn" class="primary-btn auth-submit-btn">
+          <span>Start 3-Day Free Trial (₹0) →</span>
+        </button>
+      </form>
+
+      <div class="auth-privacy-note">
+        <span>🔒 Mandatory signup activates your 72-hour trial. Passwords are cryptographic scrypt hashes.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subscription Upgrade Modal (₹399/mo) -->
+  <div id="upgradeModal" class="modal hidden">
+    <div class="modal-card upgrade-modal-card">
+      <div class="modal-head upgrade-modal-head">
+        <div class="upgrade-head-titles">
+          <div class="upgrade-head-top">
+            <span class="plan-badge accent" id="upgradeBadgeText">⏳ Free Trial Active</span>
+            <span class="upgrade-price-pill">₹399 <small>/ month</small></span>
+          </div>
+          <strong id="upgradeModalTitle">Upgrade to Universal Scroll Compare Pro</strong>
+          <small id="upgradeModalSub">Permanent Pro upgrade via Admin authorization • Temporary Pro available for
+            testing</small>
+        </div>
+        <button id="closeUpgradeModalBtn" class="close-btn" type="button" title="Close">×</button>
+      </div>
+
+      <div class="upgrade-modal-body">
+        <!-- Compact Pro Perks Banner -->
+        <div class="upgrade-perks-strip">
+          <span>✓ All Device Viewports</span>
+          <span>✓ Sync Click & Scroll</span>
+          <span>✓ Full Proxy Bypass</span>
+          <span>✓ Ownership Certificate</span>
+        </div>
+
+        <div id="upgradeAlertBox" class="auth-alert hidden"></div>
+
+        <!-- Option 1: Admin Account Authorization (Permanent Pro Plan) -->
+        <div class="upgrade-step-card">
+          <div class="step-badge-row">
+            <span class="step-pill">ADMIN ONLY</span>
+            <strong>Permanent Pro Plan Activation (₹399/mo)</strong>
+          </div>
+          <p class="step-desc">Permanent Pro Plan & confidential ownership unlock requires Administrator authorization.
+          </p>
+
+          <div class="upgrade-form-grid">
+            <div class="upgrade-input-group">
+              <label for="upgradeAdminUserInput">Administrator Username</label>
+              <input type="text" id="upgradeAdminUserInput" placeholder="Enter admin username" autocomplete="off">
+            </div>
+
+            <div class="upgrade-input-group">
+              <label for="upgradeAdminPassInput">Administrator Password</label>
+              <div class="password-input-wrapper">
+                <input type="password" id="upgradeAdminPassInput" placeholder="Enter admin password" autocomplete="off">
+                <button type="button" class="pwd-toggle-btn" id="toggleUpgradeAdminPassBtn" title="Show password"
+                  aria-label="Toggle password visibility">
+                  <svg class="eye-icon eye-show" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                    stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="eye-icon eye-hide hidden" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                    stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                    </path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button id="confirmSubscribeBtn" class="primary-btn checkout-btn" type="button">
+            <span>🔐 Verify Admin & Activate Permanent Pro →</span>
+          </button>
+        </div>
+
+        <!-- Option 2: Temporary Pro Upgrade for Remaining Users -->
+        <div class="upgrade-step-card temp-upgrade-card">
+          <div class="step-badge-row">
+            <span class="step-pill temp-pill">STANDARD USERS</span>
+            <strong>Temporary Pro Access (24-Hour Preview)</strong>
+          </div>
+          <p class="step-desc">Testing on a standard user account? Activate temporary 24-hour Pro access with one click.
+          </p>
+          <div class="upgrade-footer-actions">
+            <button id="cancelUpgradeModalBtn" class="secondary-btn upgrade-cancel-btn" type="button">Cancel</button>
+            <button id="tempUpgradeBtn" class="secondary-btn temp-activate-btn" type="button">
+              <span>⚡ Activate Temporary Pro (24h) →</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="checkout-secure-notice">🔒 Permanent Pro License & confidential authorship records are restricted to
+          Admin approval.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal Cross-Device App Install & Live Shareable URLs Modal -->
+  <div id="installAppModal" class="modal hidden">
+    <div class="modal-card upgrade-modal-card install-hub-card">
+      <div class="modal-head upgrade-modal-head">
+        <div class="upgrade-head-titles">
+          <div class="upgrade-head-top">
+            <span class="plan-badge accent">🌐 ALL DEVICES & OS</span>
+            <span class="upgrade-price-pill">Windows • macOS • Linux • Android • iOS</span>
+          </div>
+          <strong>Share App URL & Install Standalone App</strong>
+          <small>Connect across devices or install as a dedicated desktop/mobile app</small>
+        </div>
+        <button id="closeInstallAppModalBtn" class="close-btn" type="button" title="Close">×</button>
+      </div>
+
+      <div class="upgrade-modal-body">
+        <div id="installAppAlertBox" class="auth-alert hidden"></div>
+
+        <!-- Section 1: Live Online Shared URLs -->
+        <div class="upgrade-step-card">
+          <div class="step-badge-row">
+            <span class="step-pill">1. SHARED SERVER URLS</span>
+            <strong>Open in Any Browser (Mac, Windows, Linux, Mobile)</strong>
+          </div>
+          <p class="step-desc">Use the Office Wi-Fi URL for devices on the same network, or deploy to Cloud
+            (Render/Railway) so remote locations work under the same shared server:</p>
+
+          <div class="share-url-stack">
+            <div class="pay-copy-item">
+              <div class="pay-copy-meta">
+                <small>OFFICE / WI-FI LAN URL (SAME NETWORK DEVICES)</small>
+                <code id="shareLanUrlText">http://192.168.1.7:3001</code>
+              </div>
+              <button type="button" class="copy-mini-btn" id="copyLanUrlBtn">Copy Link</button>
+            </div>
+
+            <div class="pay-copy-item">
+              <div class="pay-copy-meta">
+                <small>REMOTE LOCATIONS SHARED SERVER URL (CLOUD / WAN)</small>
+                <code id="sharePublicUrlText">Deploy via render.yaml (Render / Railway) for 24/7 Remote URL</code>
+              </div>
+              <button type="button" class="copy-mini-btn" id="copyPublicUrlBtn">Copy Link</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Install Standalone App on ANY OS (PWA + Portable .exe) -->
+        <div class="upgrade-step-card temp-upgrade-card">
+          <div class="step-badge-row">
+            <span class="step-pill temp-pill">2. STANDALONE APP</span>
+            <strong>Install as a Desktop or Mobile Application</strong>
+          </div>
+          <p class="step-desc">
+            Install directly to your Desktop, Mac Dock, or Mobile Home Screen on any OS, or download the portable
+            Windows <code>.exe</code> package.
+          </p>
+          <div class="upgrade-footer-actions install-hub-actions">
+            <button id="installPwaAppBtn" class="primary-btn checkout-btn" type="button">
+              <span>📲 Install App (All OS) →</span>
+            </button>
+            <button id="downloadWindowsExeModalBtn" class="secondary-btn temp-activate-btn" type="button">
+              <span>💻 Download Windows (.exe)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-Device Selection Modal -->
+  <div id="deviceModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <strong id="modalTitleText">Select Devices to Compare</strong>
+          <small id="modalSubText">Choose minimum 2 devices to start side-by-side comparison</small>
+        </div>
+        <button id="closeModal" class="close-btn">×</button>
+      </div>
+
+      <div class="modal-url-bar">
+        <label for="modalUrlInput">Target Website URL (Required)</label>
+        <input id="modalUrlInput" type="url" placeholder="Paste or enter website URL manually (e.g. https://...)"
+          autocomplete="off">
+      </div>
+
+      <div class="modal-tabs-bar">
+        <button class="device-tab active" data-cat="all">All Presets</button>
+        <button class="device-tab" data-cat="mobile">Mobile</button>
+        <button class="device-tab" data-cat="tablet">Tablet</button>
+        <button class="device-tab" data-cat="desktop">Desktop</button>
+      </div>
+
+      <div id="devicePresets" class="device-presets"></div>
+
+      <div id="selectedAlignBar" class="selected-align-bar">
+        <div class="align-bar-header">
+          <div class="align-bar-title">
+            <strong>⇄ Selected Device Positions & Sequence</strong>
+            <small class="align-help-text">Adjust display order or auto-align screen widths</small>
+          </div>
+          <div class="align-quick-actions">
+            <button id="sortAscWidthBtn" type="button" class="sm-action-btn"
+              title="Sort selected devices from narrowest to widest">↕️ Sort Width</button>
+            <button id="reverseOrderBtn" type="button" class="sm-action-btn"
+              title="Reverse sequence order of selected devices">🔄 Reverse</button>
+          </div>
+        </div>
+        <div id="selectedOrderList" class="selected-order-chips"></div>
+      </div>
+
+      <div class="custom-device">
+        <label>Or Add Custom Device Dimensions</label>
+        <div class="custom-fields">
+          <input id="modalLabel" type="text" placeholder="Device Name (e.g. Pixel 8)">
+          <input id="modalW" type="number" min="200" max="3840" placeholder="Width (px)">
+          <span>×</span>
+          <input id="modalH" type="number" min="200" max="3840" placeholder="Height (px)">
+          <select id="modalType">
+            <option value="mobile">Mobile Phone Frame</option>
+            <option value="tablet">Tablet Frame</option>
+            <option value="desktop" selected>Desktop Monitor Frame</option>
+          </select>
+          <button id="applyCustom" class="secondary-btn">Add Custom Device</button>
+        </div>
+      </div>
+
+      <div class="modal-footer flex-footer">
+        <div class="selection-status-badge">
+          <span id="selectedDevicesBadge">0 Devices Selected (Min 2 Required)</span>
+        </div>
+        <button id="startCompareSelectedBtn" class="primary-btn disabled" disabled>Start Comparing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot Modal -->
+  <div id="screenshotModal" class="modal hidden">
+    <div class="modal-card screenshot-card">
+      <div class="modal-head">
+        <div><strong>Captured Device Screenshot</strong><small id="screenshotMeta">Device Viewport</small></div>
+        <button id="closeScreenshotModal" class="close-btn">×</button>
+      </div>
+      <div class="screenshot-body">
+        <div id="screenshotCanvasPreview" class="screenshot-preview-box"></div>
+      </div>
+      <div class="modal-footer flex-footer">
+        <button id="copyScreenshotBtn" class="secondary-btn flex-btn">📋 Copy to Clipboard</button>
+        <button id="downloadScreenshotBtn" class="primary-btn flex-btn">⬇️ Download PNG</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div id="historyModal" class="modal hidden">
+    <div class="modal-card history-modal-card">
+      <div class="modal-head">
+        <div><strong>📜 URL Verification History</strong><small>Private audit logs</small></div>
+        <button id="closeHistoryModal" class="close-btn">×</button>
+      </div>
+      <div class="history-controls-bar">
+        <div class="history-search-wrapper"><input id="historySearchInput" type="text" placeholder="🔍 Search URLs..."
+            autocomplete="off"></div>
+        <div class="history-filter-tabs">
+          <button class="history-tab active" data-filter="all">All (<span id="countAll">0</span>)</button>
+          <button class="history-tab" data-filter="verified">✓ Verified (<span id="countVerified">0</span>)</button>
+        </div>
+        <button id="clearHistoryBtn" type="button" class="danger-btn-sm">Clear All</button>
+      </div>
+      <div id="historyListContainer" class="history-list-container"></div>
+      <div class="modal-footer flex-footer">
+        <div id="historySummaryText" class="selection-status-badge">0 URLs Recorded</div>
+        <button id="closeHistoryFooterBtn" type="button" class="secondary-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- About & Ownership Modal -->
+  <div id="aboutModal" class="modal hidden">
+    <div class="modal-card about-modal-card">
+      <div class="modal-head">
+        <div class="about-head-title">
+          <span class="shield-badge">🛡️ PROPRIETARY & COPYRIGHT CERTIFICATE</span>
+          <strong>Universal Scroll Compare Pro v1.0.0</strong>
+        </div>
+        <button id="closeAboutModal" class="close-btn">×</button>
+      </div>
+      <div class="about-modal-body">
+        <div class="company-banner-box">
+          <div class="company-logo-badge"><span class="sf-symbol">SF</span></div>
+          <div class="company-details">
+            <h3>SMART FUSION CORPORATE SOLUTIONS PRIVATE LIMITED</h3>
+            <p>Quality Assurance & Software Engineering Division</p>
+          </div>
+        </div>
+        <!-- Locked State (Confidential - Shown for non-purchased/trial users) -->
+        <div id="confidentialAuthorLocked" class="confidential-lock-card">
+          <div class="confidential-lock-icon">🔒</div>
+          <div class="confidential-lock-text">
+            <strong>Confidential Developer & Authorship Details</strong>
+            <p>Lead developer identities and employee ID credentials are confidential enterprise records. They are
+              certified and accessible exclusively for verified commercial customers after purchasing the application.
+            </p>
+            <div class="confidential-badge">Unlocked After Pro License Purchase (₹399/mo)</div>
+          </div>
+        </div>
+
+        <!-- Unlocked State (Exclusively Shown After Purchasing the Application) -->
+        <div id="confidentialAuthorUnlocked" class="authorship-grid hidden">
+          <div class="author-card">
+            <div class="author-role">Original Lead Developer & Co-Author</div>
+            <div class="author-name">TEJOMURTULA VAMSI KRISHNA</div>
+            <div class="author-id">Employee ID: <mark>EMPID163</mark></div>
+          </div>
+          <div class="author-card">
+            <div class="author-role">Original Lead Developer & Co-Author</div>
+            <div class="author-name">NAMANI ARAVIND</div>
+            <div class="author-id">Employee ID: <mark>EMPID159</mark></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer flex-footer">
+        <button id="closeAboutFooterBtn" type="button" class="primary-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remote Browser Engine Dual-Mode Switcher Modal -->
+  <div id="engineSettingsModal" class="modal hidden">
+    <div class="modal-card engine-modal-card">
+      <div class="modal-head">
+        <div>
+          <strong id="engineModalTitle">⚡ Remote Browser Engine Configuration</strong>
+          <small id="engineModalSub">Choose between Local Chrome or Browserless.io Cloud Cluster</small>
+        </div>
+        <button id="closeEngineSettingsBtn" class="close-btn" type="button">×</button>
+      </div>
+
+      <div class="engine-modal-body">
+        <div class="engine-mode-selector">
+          <label class="engine-option-card active" id="optCardLocal">
+            <input type="radio" name="engineModeRadio" id="radioModeLocal" value="local" checked>
+            <div class="engine-opt-content">
+              <div class="engine-opt-title">
+                <span>💻 Local Headless Chrome / Edge</span>
+                <span class="mode-tag-pill green">Zero Cost • Recommended</span>
+              </div>
+              <p>Uses system-installed Google Chrome or Microsoft Edge with anti-bot stealth flags. High performance,
+                sub-second renders, and no external token required.</p>
+            </div>
+          </label>
+
+          <label class="engine-option-card" id="optCardCloud">
+            <input type="radio" name="engineModeRadio" id="radioModeCloud" value="cloud">
+            <div class="engine-opt-content">
+              <div class="engine-opt-title">
+                <span>☁️ Browserless.io Cloud Cluster</span>
+                <span class="mode-tag-pill purple">Offloaded Cloud</span>
+              </div>
+              <p>Offloads Chromium execution to remote Browserless.io cloud infrastructure. Ideal for server deployments
+                without local graphical displays or Docker.</p>
+            </div>
+          </label>
+        </div>
+
+        <div id="cloudTokenConfigBox" class="cloud-token-box hidden">
+          <label for="browserlessApiKeyInput">Browserless.io API Token</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="browserlessApiKeyInput" placeholder="Enter your Browserless API key"
+              autocomplete="off">
+            <button type="button" class="pwd-toggle-btn" id="toggleBrowserlessKeyBtn" title="Show token"
+              aria-label="Toggle token visibility">
+              <svg class="eye-icon eye-show" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg class="eye-icon eye-hide hidden" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                </path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+          <small class="token-help">Get your API token from <a href="https://browserless.io" target="_blank"
+              rel="noopener">Browserless.io</a>. Stored securely on your server.</small>
+        </div>
+
+        <div id="engineStatusBanner" class="engine-status-banner">
+          <span id="engineActiveModeInfo">Active Engine: Local Chrome (Auto-detected)</span>
+        </div>
+      </div>
+
+      <div class="modal-footer flex-footer">
+        <button id="cancelEngineSettingsBtn" type="button" class="secondary-btn">Cancel</button>
+        <button id="applyEngineSettingsBtn" type="button" class="primary-btn">Save & Apply Engine</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Toast Notification -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
