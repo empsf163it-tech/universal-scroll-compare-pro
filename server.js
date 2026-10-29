@@ -90,19 +90,6 @@ app.get("/api/auth/me", requireAuth, (req, res) => {
   res.json({ success: true, user: req.user });
 });
 
-// Restore Latest Active User Session (Preserves user login across port switches / server restarts)
-app.get("/api/auth/session-restore", (req, res) => {
-  try {
-    const active = db.getLatestUserSession();
-    if (active && active.user && active.token) {
-      return res.json({ success: true, token: active.token, user: active.user });
-    }
-    res.json({ success: false });
-  } catch (e) {
-    res.json({ success: false });
-  }
-});
-
 // Logout User
 app.post("/api/auth/logout", requireAuth, (req, res) => {
   db.deleteSession(req.token);
@@ -218,65 +205,24 @@ app.post("/api/payment/create-order", requireAuth, (req, res) => {
   }
 });
 
-// Strict Payment & Admin / Temporary Upgrade Verification Endpoint
+// Payment Gateway Verification Endpoint (Admin has active Pro Plan; Normal users see Coming Soon until gateway is linked)
 app.post("/api/payment/verify", requireAuth, (req, res) => {
   try {
-    const { mode, adminUsername, adminPassword, orderId, paymentId, signature, licenseKey, utrNumber } = req.body;
-
     const isCurrentUserAdmin = req.user.username && req.user.username.toLowerCase() === "admin";
-
-    // Path 1: Temporary Pro Upgrade for Remaining Users (24-Hour Temporary Pro Access)
-    if (mode === "temporary" && !isCurrentUserAdmin) {
-      const tempResult = db.grantTemporarySubscription(req.user.id, 24);
-      const updatedAccess = db.checkUserAccess(req.user.id);
-      return res.json({
-        success: true,
-        verified: true,
-        isTemporary: true,
-        subscriptionStatus: "temp_pro",
-        message: "Temporary Pro Access (24h) activated for testing!",
-        subscription: updatedAccess,
-        expiresAt: tempResult.expiresAt
+    if (!isCurrentUserAdmin) {
+      return res.status(503).json({
+        error: "🚀 Coming Soon! Online payment gateway integration is not linked yet. Your account remains active on the Free Trial plan."
       });
     }
 
-    // Path 2: Permanent Pro Plan Activation (Strictly requires Admin Account or Admin Credentials: admin / admin@26SF)
-    let isAdminAuthorized = isCurrentUserAdmin;
-    if (!isAdminAuthorized && adminUsername && adminPassword) {
-      isAdminAuthorized = db.verifyAdminCredentials(adminUsername, adminPassword);
-    }
-
-    if (!isAdminAuthorized && licenseKey && utrNumber && String(utrNumber).trim().length >= 6) {
-      isAdminAuthorized = verifyProLicenseKey(req.user, licenseKey);
-    }
-
-    if (!isAdminAuthorized) {
-      return res.status(403).json({
-        error: "Permanent Pro Plan upgrade is restricted to the Admin account (admin). Remaining users can use 'Activate Temporary Pro Access' below."
-      });
-    }
-
-    // Record verified admin authorization in database
-    db.recordPaymentTransaction({
-      userId: req.user.id,
-      orderId: orderId || `adm_${Date.now()}`,
-      paymentId: paymentId || utrNumber || "admin_approved",
-      signature: signature || "admin_verified_26SF",
-      amount: 39900,
-      currency: "INR",
-      status: "success"
-    });
-
-    // Grant full permanent/30-day paid Pro subscription
-    const subResult = db.grantPaidSubscription(req.user.id, isCurrentUserAdmin ? 36500 : 30);
+    const subResult = db.grantPaidSubscription(req.user.id, 36500);
     const updatedAccess = db.checkUserAccess(req.user.id);
 
     res.json({
       success: true,
       verified: true,
-      isTemporary: false,
       subscriptionStatus: "paid",
-      message: "Admin verification successful! Permanent Pro Plan activated.",
+      message: "Admin Pro Plan Active.",
       subscription: updatedAccess,
       expiresAt: subResult.expiresAt
     });

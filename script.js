@@ -2372,21 +2372,7 @@ function setAuthAlert(msg, type = "error") {
 }
 
 async function verifyAuthSession() {
-  let token = getAuthToken();
-
-  // If token was cleared during a port switch (e.g. 5500 -> 3001) or server restart, restore active DB session
-  if (!token && localStorage.getItem(EXPLICIT_LOGOUT_KEY) !== "true") {
-    try {
-      const restored = await safeFetchJson("/api/auth/session-restore");
-      if (restored && restored.success && restored.token && restored.user) {
-        setAuthToken(restored.token, restored.user);
-        currentAuthUser = restored.user;
-        showAppWorkspace(restored.user);
-        loadUserPrivateHistory();
-        return true;
-      }
-    } catch (e) {}
-  }
+  const token = getAuthToken();
 
   if (!token) {
     showPublicLanding();
@@ -2593,23 +2579,15 @@ function openUpgradeModal() {
   const modal = $("upgradeModal");
   if (!modal) return;
   setUpgradeAlert(null);
-  if ($("upgradeAdminUserInput")) $("upgradeAdminUserInput").value = "";
-  if ($("upgradeAdminPassInput")) {
-    $("upgradeAdminPassInput").value = "";
-    $("upgradeAdminPassInput").type = "password";
-  }
 
   const subText = $("upgradeModalSub");
   const badgeText = $("upgradeBadgeText");
-  if (currentAuthUser && currentAuthUser.subscriptionStatus === "temp_pro") {
-    if (badgeText) badgeText.textContent = `⚡ Temp Pro (${currentAuthUser.remainingTrialHours || 24}h left)`;
-    if (subText) subText.textContent = "Enter Admin credentials to upgrade permanently to Pro Plan.";
-  } else if (currentAuthUser && currentAuthUser.subscriptionStatus === "trial") {
-    if (badgeText) badgeText.textContent = `Free Trial Active (${currentAuthUser.remainingTrialHours || 72}h left)`;
-    if (subText) subText.textContent = "Permanent Pro upgrade via Admin authorization • Temporary Pro available for testing";
+  if (currentAuthUser && currentAuthUser.subscriptionStatus === "paid") {
+    if (badgeText) badgeText.textContent = "✓ Pro Plan Active";
+    if (subText) subText.textContent = "Your Administrator Pro Plan is active.";
   } else {
-    if (badgeText) badgeText.textContent = "Upgrade Required";
-    if (subText) subText.textContent = "Trial expired. Authorize via Admin or activate 24-hour Temporary Pro access below.";
+    if (badgeText) badgeText.textContent = `⏳ Free Trial Active (${(currentAuthUser && currentAuthUser.remainingTrialHours) || 72}h left)`;
+    if (subText) subText.textContent = "Online payment gateway integration coming soon";
   }
 
   modal.classList.remove("hidden");
@@ -3025,7 +3003,7 @@ function initAuthManager() {
     };
   }
 
-  // Handle Option 1: Admin Authorization for Permanent Pro Plan (admin / admin@26SF)
+  // Handle Upgrade Button Click -> Show "Coming Soon" Notice for Normal/Personal Users
   if ($("confirmSubscribeBtn")) {
     $("confirmSubscribeBtn").onclick = async () => {
       const token = getAuthToken();
@@ -3035,91 +3013,11 @@ function initAuthManager() {
         return;
       }
 
-      setUpgradeAlert(null);
-      const adminUsername = $("upgradeAdminUserInput") ? $("upgradeAdminUserInput").value.trim() : "";
-      const adminPassword = $("upgradeAdminPassInput") ? $("upgradeAdminPassInput").value : "";
-
-      if (!adminUsername || !adminPassword) {
-        setUpgradeAlert("Please enter Admin Username and Admin Password for Permanent Pro activation, or use 'Activate Temporary Pro (24h)' below.", "error");
-        if ($("upgradeAdminUserInput") && !adminUsername) $("upgradeAdminUserInput").focus();
-        else if ($("upgradeAdminPassInput")) $("upgradeAdminPassInput").focus();
-        return;
-      }
-
-      const btn = $("confirmSubscribeBtn");
-      const originalText = btn.innerHTML;
-      btn.innerHTML = `<span>⏳ Verifying Admin Credentials...</span>`;
-      btn.disabled = true;
-
-      try {
-        const verifyData = await safeFetchJson("/api/payment/verify", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({ mode: "admin", adminUsername, adminPassword })
-        });
-
-        closeUpgradeModal();
-        if (currentAuthUser) {
-          currentAuthUser.subscriptionStatus = "paid";
-          currentAuthUser.hasActiveAccess = true;
-          currentAuthUser.subscriptionExpiresAt = verifyData.expiresAt;
-          updateWorkspaceUserUI(currentAuthUser);
-          updateAboutModalConfidentiality();
-        }
-        showToast("🎉 Admin Verified! Permanent Pro Plan activated.");
-      } catch (e) {
-        setUpgradeAlert(e.message || "Admin verification failed.", "error");
-      } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-      }
-    };
-  }
-
-  // Handle Option 2: Temporary Pro Upgrade for Remaining Users (24-Hour Preview)
-  if ($("tempUpgradeBtn")) {
-    $("tempUpgradeBtn").onclick = async () => {
-      const token = getAuthToken();
-      if (!token) {
-        closeUpgradeModal();
-        openAuthModal("register");
-        return;
-      }
-
-      setUpgradeAlert(null);
-      const btn = $("tempUpgradeBtn");
-      const originalText = btn.innerHTML;
-      btn.innerHTML = `<span>⏳ Activating Temporary Pro...</span>`;
-      btn.disabled = true;
-
-      try {
-        const verifyData = await safeFetchJson("/api/payment/verify", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({ mode: "temporary" })
-        });
-
-        closeUpgradeModal();
-        if (currentAuthUser) {
-          currentAuthUser.subscriptionStatus = verifyData.subscriptionStatus || "temp_pro";
-          currentAuthUser.hasActiveAccess = true;
-          currentAuthUser.remainingTrialHours = 24;
-          currentAuthUser.subscriptionExpiresAt = verifyData.expiresAt;
-          updateWorkspaceUserUI(currentAuthUser);
-        }
-        showToast("⚡ Temporary Pro Access (24h) activated!");
-      } catch (e) {
-        setUpgradeAlert(e.message || "Could not activate temporary Pro access.", "error");
-      } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-      }
+      setUpgradeAlert(
+        "🚀 Coming Soon! Online payment gateway integration (UPI / Cards / NetBanking) is not linked yet. Your account remains active on the Free Trial plan.",
+        "success"
+      );
+      showToast("🚀 Coming Soon — No payment gateways linked yet!");
     };
   }
 
