@@ -1925,38 +1925,44 @@ body.light-workspace .add-tab-btn:hover {
    Header License Badge & Ownership Certificate Modal
    ========================================================================== */
 .license-badge-btn {
-  background: linear-gradient(135deg, #322452 0%, #1d1730 100%);
-  border: 1px solid #6d4ca8;
-  color: #f3e8ff;
-  height: 34px;
-  padding: 0 14px;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  color: #ffffff;
+  height: 36px;
+  padding: 0 14px 0 6px;
   border-radius: 999px;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   transition: all 0.15s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .license-badge-btn:hover {
-  background: linear-gradient(135deg, #43306b 0%, #2a2145 100%);
-  border-color: #a855f7;
+  background: linear-gradient(135deg, #27354d 0%, #17233b 100%);
+  border-color: #fbbf24;
   color: #ffffff;
   transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(251, 191, 36, 0.25);
 }
 
-.license-badge-btn .shield-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #c084fc;
+.header-sf-logo {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
 }
 
 .license-badge-btn .corp-name {
-  letter-spacing: 0.2px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  color: #ffffff;
 }
 
 .about-modal-card {
@@ -2002,21 +2008,32 @@ body.light-workspace .add-tab-btn:hover {
 }
 
 .company-logo-badge {
-  width: 52px;
-  height: 52px;
-  background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+  width: 64px;
+  height: 64px;
+  background: #0f172a;
+  border: 1px solid rgba(251, 191, 36, 0.45);
   border-radius: 12px;
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  box-shadow: 0 0 12px rgba(124, 58, 237, 0.5);
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
-.sf-symbol {
+.about-sf-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.about-sf-wordmark {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
   font-weight: 900;
-  font-size: 20px;
   color: #ffffff;
   letter-spacing: 1px;
+  margin-bottom: 2px;
 }
 
 .company-details h3 {
@@ -3450,20 +3467,66 @@ body.dark-saas {
   font-weight: 800;
   padding: 4px 10px;
   border-radius: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.sf-brand-hero-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.sf-contact-logo-img {
+  width: 74px;
+  height: 74px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+  flex-shrink: 0;
+}
+
+.sf-brand-hero-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sf-brand-wordmark {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1.2px;
+  line-height: 1.1;
 }
 
 .contact-info h3 {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 4px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
 }
 
 .contact-info p {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: #94a3b8;
-  margin-bottom: 16px;
+  margin: 0;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-sf-logo {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .author-credits {
