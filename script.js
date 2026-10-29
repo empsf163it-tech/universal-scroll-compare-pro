@@ -473,7 +473,13 @@ function renderTabsBar() {
     const title = escapeHtml(tab.title || getTabTitleFromUrl(tab.url));
     return `
       <div class="tab-item ${isActive ? 'active' : ''}" data-tab-id="${tab.id}" title="${title}">
-        <span class="tab-favicon">🌐</span>
+        <span class="tab-favicon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </span>
         <span class="tab-title">${title}</span>
         <button type="button" class="tab-close-btn" data-tab-id="${tab.id}" title="Close Tab">✕</button>
       </div>
@@ -492,45 +498,163 @@ function renderTabsBar() {
   });
 }
 
+function getUserTabsStorageKey(user = currentAuthUser) {
+  if (!user) return null;
+  const scope = user.username ? String(user.username).toLowerCase() : `id_${user.id}`;
+  return `responsive_compare_tabs_user_${scope}`;
+}
+
+function getUserTabsIdStorageKey(user = currentAuthUser) {
+  if (!user || !user.id) return null;
+  return `responsive_compare_tabs_uid_${user.id}`;
+}
+
+function getUserHistoryStorageKey(user = currentAuthUser) {
+  if (!user) return null;
+  const scope = user.username ? String(user.username).toLowerCase() : `id_${user.id}`;
+  return `responsive_compare_history_user_${scope}`;
+}
+
+function getUserHistoryIdStorageKey(user = currentAuthUser) {
+  if (!user || !user.id) return null;
+  return `responsive_compare_history_uid_${user.id}`;
+}
+
+// One-time cleanup of legacy shared global storage keys so admin / other accounts never inherit Empsf163's URL
+function cleanupLegacySharedGlobalStorage() {
+  try {
+    const legacyTabs = localStorage.getItem(MULTI_TAB_STORAGE_KEY);
+    if (legacyTabs) {
+      if (!localStorage.getItem("responsive_compare_tabs_user_empsf163")) {
+        localStorage.setItem("responsive_compare_tabs_user_empsf163", legacyTabs);
+      }
+      localStorage.removeItem(MULTI_TAB_STORAGE_KEY);
+    }
+    const legacyHist = localStorage.getItem(URL_HISTORY_STORAGE_KEY);
+    if (legacyHist) {
+      if (!localStorage.getItem("responsive_compare_history_user_empsf163")) {
+        localStorage.setItem("responsive_compare_history_user_empsf163", legacyHist);
+      }
+      localStorage.removeItem(URL_HISTORY_STORAGE_KEY);
+    }
+  } catch (e) {}
+}
+
+let syncPresetsDebounceTimer = null;
+function scheduleServerWorkspaceSync() {
+  if (!currentAuthUser) return;
+  const token = typeof getAuthToken === "function" ? getAuthToken() : null;
+  if (!token) return;
+
+  clearTimeout(syncPresetsDebounceTimer);
+  const snapshotUser = currentAuthUser;
+  const snapshotSession = {
+    activeTabId: appState.activeTabId,
+    tabs: appState.tabs
+  };
+  const snapshotHistory = Array.isArray(urlHistory) ? [...urlHistory] : [];
+
+  syncPresetsDebounceTimer = setTimeout(async () => {
+    if (!currentAuthUser || currentAuthUser.id !== snapshotUser.id) return;
+    try {
+      await safeFetchJson("/api/user/presets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          presets: {
+            session: snapshotSession,
+            urlHistory: snapshotHistory
+          }
+        })
+      });
+    } catch (e) {}
+  }, 350);
+}
+
 function saveSession() {
   try {
+    if (!currentAuthUser) return;
     const session = {
       activeTabId: appState.activeTabId,
       tabs: appState.tabs
     };
-    localStorage.setItem(MULTI_TAB_STORAGE_KEY, JSON.stringify(session));
+    const serialized = JSON.stringify(session);
+    const keyByName = getUserTabsStorageKey(currentAuthUser);
+    const keyById = getUserTabsIdStorageKey(currentAuthUser);
+    if (keyByName) localStorage.setItem(keyByName, serialized);
+    if (keyById) localStorage.setItem(keyById, serialized);
+    scheduleServerWorkspaceSync();
   } catch (e) {}
 }
 
-function restoreSession() {
+function applySessionObjectToWorkspace(session) {
+  if (!session || !Array.isArray(session.tabs) || session.tabs.length < 1) return false;
+  appState.tabs = session.tabs.map(t => {
+    const cleanUrl = (t.url === "shine" || t.url === "https://example.com") ? "" : (t.url || "");
+    return {
+      ...t,
+      url: cleanUrl,
+      inComparison: !!(cleanUrl && t.inComparison),
+      screens: (t.screens || []).map(s => {
+        if (s.width === 1024 && s.height === 800 && (s.type === "desktop" || s.name === "Desktop View")) {
+          return { ...s, name: "Tablet View", type: "tablet", os: "Tablet OS" };
+        }
+        return s;
+      })
+    };
+  });
+  appState.activeTabId = session.activeTabId && appState.tabs.some(t => t.id === session.activeTabId)
+    ? session.activeTabId
+    : appState.tabs[0].id;
+
+  switchTab(appState.activeTabId);
+  return true;
+}
+
+function resetWorkspaceInMemoryOnly() {
+  const freshTabId = "tab_" + Math.random().toString(36).substring(2, 9);
+  appState.tabs = [{
+    id: freshTabId,
+    title: "New Tab",
+    url: "",
+    renderedUrl: "",
+    activeScreenIndex: null,
+    layout: "row",
+    syncScroll: true,
+    checkerboard: true,
+    inComparison: false,
+    selectedPresetIds: ["p2", "pt_768", "p4"],
+    screens: []
+  }];
+  appState.activeTabId = freshTabId;
+  syncUrlInputs("");
+  if (empty) empty.classList.remove("hidden");
+  if (comparison) comparison.classList.add("hidden");
+  if (screenGrid) screenGrid.innerHTML = "";
+  renderTabsBar();
+}
+
+function restoreSession(user = currentAuthUser) {
   try {
-    const raw = localStorage.getItem(MULTI_TAB_STORAGE_KEY);
+    cleanupLegacySharedGlobalStorage();
+    if (!user) {
+      resetWorkspaceInMemoryOnly();
+      return false;
+    }
+    const keyByName = getUserTabsStorageKey(user);
+    const keyById = getUserTabsIdStorageKey(user);
+    const raw = (keyByName && localStorage.getItem(keyByName)) || (keyById && localStorage.getItem(keyById));
     if (raw) {
       const session = JSON.parse(raw);
-      if (session && session.tabs && session.tabs.length >= 1) {
-        appState.tabs = session.tabs.map(t => {
-          const cleanUrl = (t.url === "shine" || t.url === "https://example.com") ? "" : (t.url || "");
-          return {
-            ...t,
-            url: cleanUrl,
-            inComparison: !!(cleanUrl && t.inComparison),
-            screens: (t.screens || []).map(s => {
-              if (s.width === 1024 && s.height === 800 && (s.type === "desktop" || s.name === "Desktop View")) {
-                return { ...s, name: "Tablet View", type: "tablet", os: "Tablet OS" };
-              }
-              return s;
-            })
-          };
-        });
-        appState.activeTabId = session.activeTabId && appState.tabs.some(t => t.id === session.activeTabId)
-          ? session.activeTabId
-          : appState.tabs[0].id;
-
-        switchTab(appState.activeTabId);
+      if (applySessionObjectToWorkspace(session)) {
         return true;
       }
     }
   } catch (e) {}
+  resetWorkspaceInMemoryOnly();
   return false;
 }
 
@@ -598,17 +722,34 @@ function addUrlToHistory(rawUrl) {
 
 function saveUrlHistory() {
   try {
-    localStorage.setItem(URL_HISTORY_STORAGE_KEY, JSON.stringify(urlHistory));
+    if (!currentAuthUser) return;
+    const serialized = JSON.stringify(urlHistory);
+    const keyByName = getUserHistoryStorageKey(currentAuthUser);
+    const keyById = getUserHistoryIdStorageKey(currentAuthUser);
+    if (keyByName) localStorage.setItem(keyByName, serialized);
+    if (keyById) localStorage.setItem(keyById, serialized);
+    scheduleServerWorkspaceSync();
   } catch (e) {}
 }
 
-function restoreUrlHistory() {
+function restoreUrlHistory(user = currentAuthUser) {
   try {
-    const raw = localStorage.getItem(URL_HISTORY_STORAGE_KEY);
+    cleanupLegacySharedGlobalStorage();
+    if (!user) {
+      urlHistory = [];
+      return;
+    }
+    const keyByName = getUserHistoryStorageKey(user);
+    const keyById = getUserHistoryIdStorageKey(user);
+    const raw = (keyByName && localStorage.getItem(keyByName)) || (keyById && localStorage.getItem(keyById));
     if (raw) {
       urlHistory = JSON.parse(raw) || [];
+    } else {
+      urlHistory = [];
     }
-  } catch (e) {}
+  } catch (e) {
+    urlHistory = [];
+  }
 }
 
 function openHistoryModal() {
@@ -792,7 +933,7 @@ function updateLayoutMode(mode) {
   
   const layoutBtn = $("viewLayoutModeBtn");
   if (layoutBtn) {
-    layoutBtn.textContent = mode === "row" ? "▤ Row Scroll" : mode === "grid" ? "▦ Grid Wrap" : "☰ Stack";
+    layoutBtn.textContent = mode === "row" ? "Row Scroll" : mode === "grid" ? "Grid Wrap" : "Stack";
   }
   
   [...screenGrid.children].forEach((card, i) => fitDeviceScreen(i, card));
@@ -1943,11 +2084,8 @@ if (abtModal) {
 
 // Initial Page Load Check
 window.onload = () => {
-  restoreUrlHistory();
-  const restored = restoreSession();
-  if (!restored) {
-    createNewTab("", null);
-  }
+  cleanupLegacySharedGlobalStorage();
+  resetWorkspaceInMemoryOnly();
   initRemoteBrowserEngineClient();
   initAuthManager();
 };
@@ -2431,12 +2569,16 @@ function showPublicLanding() {
 }
 
 function showAppWorkspace(user) {
+  currentAuthUser = user;
   const landing = $("publicLandingView");
   const workspace = $("appWorkspaceView");
   if (landing) landing.classList.add("hidden");
   if (workspace) workspace.classList.remove("hidden");
   document.body.classList.remove("dark-saas");
   updateWorkspaceUserUI(user);
+  restoreUrlHistory(user);
+  restoreSession(user);
+  renderHistoryList();
 }
 
 function updateAuthHeaderText(isSignIn) {
@@ -2649,18 +2791,67 @@ function updateWorkspaceUserUI(user) {
 
 async function loadUserPrivateHistory() {
   const token = getAuthToken();
-  if (!token) return;
+  const activeUser = currentAuthUser;
+  if (!token || !activeUser) return;
 
   try {
+    // 1. Load user-isolated workspace session & history from backend presets if available
+    const presetRes = await safeFetchJson("/api/user/presets", {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (currentAuthUser && currentAuthUser.id === activeUser.id && presetRes && presetRes.presets) {
+      const remoteSession = presetRes.presets.session;
+      const hasLocalActiveUrl = appState.tabs && appState.tabs.some(t => t.url && t.url.trim().length > 0);
+      if (!hasLocalActiveUrl && remoteSession && Array.isArray(remoteSession.tabs) && remoteSession.tabs.length > 0) {
+        applySessionObjectToWorkspace(remoteSession);
+        const serialized = JSON.stringify({ activeTabId: appState.activeTabId, tabs: appState.tabs });
+        const keyByName = getUserTabsStorageKey(activeUser);
+        const keyById = getUserTabsIdStorageKey(activeUser);
+        if (keyByName) localStorage.setItem(keyByName, serialized);
+        if (keyById) localStorage.setItem(keyById, serialized);
+      }
+      if (Array.isArray(presetRes.presets.urlHistory) && presetRes.presets.urlHistory.length > 0 && urlHistory.length === 0) {
+        urlHistory = presetRes.presets.urlHistory;
+      }
+    }
+  } catch (e) {}
+
+  try {
+    // 2. Load & merge user-isolated URL verification history from backend database
     const data = await safeFetchJson("/api/user/history", {
       headers: { "Authorization": `Bearer ${token}` }
     });
-    if (data.success && data.history) {
-      urlHistory = data.history.map(item => ({
-        url: item.url,
-        verified: item.status === "verified",
-        date: new Date(item.tested_at).toLocaleString()
-      }));
+    if (currentAuthUser && currentAuthUser.id === activeUser.id && data.success && Array.isArray(data.history)) {
+      const mergedMap = new Map();
+      urlHistory.forEach(item => {
+        if (item && item.url) {
+          mergedMap.set(item.url.toLowerCase(), item);
+        }
+      });
+      data.history.forEach(item => {
+        if (!item || !item.url) return;
+        const key = item.url.toLowerCase();
+        const timeStr = item.tested_at
+          ? new Date(item.tested_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+          : "Recently";
+        if (mergedMap.has(key)) {
+          const existing = mergedMap.get(key);
+          existing.verified = existing.verified || item.status === "verified";
+          if (!existing.timestamp) existing.timestamp = timeStr;
+          if (!existing.title) existing.title = getTabTitleFromUrl(item.url);
+          if (!existing.id) existing.id = "hist_" + (item.id || Math.random().toString(36).substring(2, 9));
+        } else {
+          mergedMap.set(key, {
+            id: "hist_" + (item.id || Math.random().toString(36).substring(2, 9)),
+            url: item.url,
+            title: getTabTitleFromUrl(item.url),
+            timestamp: timeStr,
+            verified: item.status === "verified"
+          });
+        }
+      });
+      urlHistory = Array.from(mergedMap.values());
+      saveUrlHistory();
       renderHistoryList();
     }
   } catch (e) {
@@ -3030,9 +3221,14 @@ function initAuthManager() {
     };
   }
 
-  // Handle Logout
+  // Handle Logout (Preserve user's tabs & history in their private account storage; clear in-memory UI for next user)
   if ($("logoutBtn")) {
     $("logoutBtn").onclick = async () => {
+      if (currentAuthUser) {
+        saveSession();
+        saveUrlHistory();
+      }
+      clearTimeout(syncPresetsDebounceTimer);
       const token = getAuthToken();
       if (token) {
         try {
@@ -3045,8 +3241,11 @@ function initAuthManager() {
       setAuthToken(null);
       localStorage.setItem(EXPLICIT_LOGOUT_KEY, "true");
       currentAuthUser = null;
+      urlHistory = [];
+      resetWorkspaceInMemoryOnly();
+      renderHistoryList();
       showPublicLanding();
-      showToast("Signed out. You have returned to the public portal.");
+      showToast("Signed out. Your workspace URLs & history are safely saved to your account.");
     };
   }
 }
