@@ -540,7 +540,16 @@ function getTargetSrc(rawUrl, index = 0) {
   }
   let u = rawUrl.trim();
   if (!/^https?:\/\//i.test(u)) u = "https://" + u;
-  return `${getApiBaseUrl()}/api/proxy?url=${encodeURIComponent(u)}&index=${index}`;
+  try {
+    const parsed = new URL(u);
+    const lastSeg = parsed.pathname.split("/").filter(Boolean).pop() || "";
+    const pageSegment = lastSeg.includes(".") ? `/${encodeURIComponent(lastSeg)}` : "";
+    const extraSearch = parsed.search ? `&${parsed.search.slice(1)}` : "";
+    const hashPart = parsed.hash || "";
+    return `${getApiBaseUrl()}/api/proxy${pageSegment}?url=${encodeURIComponent(u)}&index=${index}${extraSearch}${hashPart}`;
+  } catch (e) {
+    return `${getApiBaseUrl()}/api/proxy?url=${encodeURIComponent(u)}&index=${index}`;
+  }
 }
 
 function resetToHomeLanding() {

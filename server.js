@@ -349,7 +349,7 @@ app.post("/api/settings/browser-mode", requireAuth, (req, res) => {
 });
 
 // Live Interactive Website Proxy (Strips X-Frame-Options/CSP & Injects Scroll-Sync + Interaction Bridge)
-app.get("/api/proxy", async (req, res) => {
+app.get(["/api/proxy", "/api/proxy/:pageName"], async (req, res) => {
   const rawUrl = req.query.url;
   const vpIndex = parseInt(req.query.index || "0", 10);
 
@@ -365,7 +365,7 @@ app.get("/api/proxy", async (req, res) => {
   try {
     const parsedTarget = new URL(targetUrl);
     // If targetUrl points to our own proxy, unwrap it
-    if (parsedTarget.pathname === "/api/proxy" && parsedTarget.searchParams.get("url")) {
+    if (parsedTarget.pathname.startsWith("/api/proxy") && parsedTarget.searchParams.get("url")) {
       targetUrl = parsedTarget.searchParams.get("url");
     }
   } catch (urlErr) {
@@ -604,8 +604,41 @@ app.get("/api/proxy", async (req, res) => {
 
     var a = (e.target && e.target.closest) ? e.target.closest('a[href]') : null;
     var rawHref = a ? (a.getAttribute('href') || '').trim() : '';
+    var lowerHref = rawHref.toLowerCase();
 
-    // 1. Broadcast user click to all other device viewports
+    // Check if this click is a full-page anchor navigation (e.g. index.html, about.html, catalog.html)
+    var isMultiPageLink = Boolean(
+      a &&
+      rawHref &&
+      !rawHref.startsWith('#') &&
+      !lowerHref.startsWith('javascript:') &&
+      !lowerHref.startsWith('mailto:') &&
+      !lowerHref.startsWith('tel:') &&
+      a.target !== '_blank' &&
+      !a.hasAttribute('download') &&
+      !e.defaultPrevented
+    );
+
+    if (isMultiPageLink) {
+      try {
+        var resolved = new URL(rawHref, "${baseHref}").href;
+        if (/^https?:\\/\\//i.test(resolved)) {
+          e.preventDefault();
+          if (!isProgrammaticClick) {
+            window.parent.postMessage({
+              type: 'USC_IFRAME_NAVIGATE',
+              index: vpIndex,
+              url: resolved
+            }, '*');
+          } else {
+            window.location.href = window.location.origin + '/api/proxy?url=' + encodeURIComponent(resolved) + '&index=' + vpIndex;
+          }
+          return;
+        }
+      } catch (err) {}
+    }
+
+    // Broadcast in-page user click (hamburger menu, tabs, accordions, theme toggles, #hash links) to all other device viewports
     if (!isProgrammaticClick && clickable) {
       var desc = buildClickDescriptor(clickable);
       if (desc) {
@@ -617,17 +650,14 @@ app.get("/api/proxy", async (req, res) => {
       }
     }
 
-    // 2. Handle anchor navigation safely inside the proxy
+    // Handle #hash anchor navigation safely inside the proxy
     if (!a || !rawHref) return;
-    var lowerHref = rawHref.toLowerCase();
     if (lowerHref.startsWith('javascript:') || lowerHref.startsWith('mailto:') || lowerHref.startsWith('tel:')) {
       return;
     }
 
     if (rawHref.startsWith('#')) {
-      // If the page's own SPA script already called e.preventDefault() (e.g. Table & Tale showPage), let it finish
       if (e.defaultPrevented) return;
-      // Otherwise prevent <base href> from reloading cross-origin and smoothly scroll to the section
       e.preventDefault();
       if (rawHref === '#' || rawHref === '#top') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -641,25 +671,6 @@ app.get("/api/proxy", async (req, res) => {
       } catch (err) {}
       return;
     }
-
-    if (a.target === '_blank' || a.hasAttribute('download')) return;
-    if (e.defaultPrevented) return;
-
-    try {
-      var resolved = new URL(rawHref, "${baseHref}").href;
-      if (/^https?:\\/\\//i.test(resolved)) {
-        e.preventDefault();
-        if (!isProgrammaticClick) {
-          window.parent.postMessage({
-            type: 'USC_IFRAME_NAVIGATE',
-            index: vpIndex,
-            url: resolved
-          }, '*');
-        } else {
-          window.location.href = '/api/proxy?url=' + encodeURIComponent(resolved) + '&index=' + vpIndex;
-        }
-      }
-    } catch (err) {}
   }, false);
 })();
 </script>`;
